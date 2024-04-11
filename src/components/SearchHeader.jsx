@@ -16,6 +16,7 @@ export default function SearchHeader() {
   const [text, setText] = useState('');
   const handleSubmit = e => {
     e.preventDefault();
+    console.log(text);
     navigate(`/videos/${text}`);
   }
   useEffect(() => {
@@ -36,7 +37,7 @@ export default function SearchHeader() {
           </Grid>
           <Grid item xs={6}>
             <Paper
-              component="form" onClick={handleSubmit}
+              component="form" onSubmit={handleSubmit}
               sx={{ p:'2px 4px', display:'flex', alignItems:'center', width:'100%' }}
             >
               <InputBase

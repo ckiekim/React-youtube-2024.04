@@ -7,40 +7,36 @@ import HourglassTopIcon from '@mui/icons-material/HourglassTop';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import VideoCard from "../components/VideoCard";
 
-// const keywordUri = `https://youtube.googleapis.com/youtube/v3/search?key=${process.env.REACT_APP_YOUTUBE_API_KEY}&maxResults=25&part=snippet&q=`;
-// const popularUri = `https://youtube.googleapis.com/youtube/v3/videos?chart=mostPopular&key=${process.env.REACT_APP_YOUTUBE_API_KEY}&maxResults=25&part=snippet`;
+const keywordUri = `https://youtube.googleapis.com/youtube/v3/search?key=${process.env.REACT_APP_YOUTUBE_API_KEY}&maxResults=25&part=snippet&q=`;
+const popularUri = `https://youtube.googleapis.com/youtube/v3/videos?chart=mostPopular&key=${process.env.REACT_APP_YOUTUBE_API_KEY}&maxResults=25&part=snippet`;
 
 export default function Videos() {
   const { keyword } = useParams();
-  // console.log('Videos:keyword=' + keyword);
   const {isLoading, error, data: videos} = useQuery({
     queryKey: ['videos', keyword],
     queryFn: async () => {
-      // const uri = keyword ? keywordUri + keyword : popularUri;
-      const data = await axios.get(`/data/${keyword ? 'search' : 'popular'}.json`)
-        .then(res => res.data.item);
-      console.log(data);
-      return data;
-      // return axios
-      //         .get(`/data/${keyword ? 'search' : 'popular'}.json`)
-      //         // .get(uri)
-      //         .then(res => res.data.item);
-      //         // .then(res => keyword ? res.data.items.shift() : res.data.items);
+      const uri = keyword ? keywordUri + keyword : popularUri;
+      return axios
+              .get(`/data/${keyword ? 'search' : 'popular'}.json`)
+              // .get(uri)
+              .then(res => res.data.items);
+              // .then(res => keyword ? res.data.items.shift() : res.data.items);
     },
-    // staleTime: 1000 * 60 * 1,       // 1분, ms 단위로 지정할 수 있음
+    staleTime: 1000 * 60 * 1,       // 1분, ms 단위로 지정할 수 있음
   });
+
   return (
     <>
       {isLoading && <p><HourglassTopIcon /> Loading...</p>}
       {error && <p><WarningAmberIcon /> Something is wrong!!!</p>}
       {videos && (
-          <Grid container spacing={1}>
-            {videos.map(video => (
-              <Grid item xs={12} sm={6} md={4} lg={3}>
-                <VideoCard video={video} />
-              </Grid>
-            ))}
-          </Grid>
+        <Grid container spacing={1}>
+          {videos.map(video => (
+            <Grid item xs={12} sm={6} md={4} lg={3}>
+              <VideoCard video={video} />
+            </Grid>
+          ))}
+        </Grid>
       )}
     </>
   )
