@@ -1,9 +1,10 @@
 import { Outlet } from 'react-router-dom';
+import SearchHeader from './components/SearchHeader';
 
 function App() {
-  console.log(process.env.REACT_APP_YOUTUBE_API_KEY);
   return (
     <>
+      <SearchHeader />
       <Outlet />
     </>
   );
