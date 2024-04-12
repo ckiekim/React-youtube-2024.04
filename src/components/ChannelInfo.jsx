@@ -9,8 +9,8 @@ export default function ChannelInfo({ id, name }) {
     queryKey: ['channel', id],
     queryFn: async () => {
       return axios
-              .get('/data/channels.json')
-              // .get(uri)
+              // .get('/data/channels.json')
+              .get(uri)
               .then(res => res.data.items[0].snippet.thumbnails.default.url)
     },
     staleTime: 1000 * 60 * 5,     // 5분
