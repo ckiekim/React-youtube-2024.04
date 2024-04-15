@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { register, loginWithGithub } from '../api/firebase';
+import { register, loginWithGithub, logout } from '../api/firebase';
+import { uploadImage } from "../api/cloudinary";
 
 export default function SignUp() {
-  const [userInfo, setUserInfo] = useState({email:'', password:''});
+  const [userInfo, setUserInfo] = useState({email:'', password:'', name:'', photo:''});
+  const [file, setFile] = useState();
   const [user, setUser] = useState();
   const handleChange = e => {
     setUserInfo({...userInfo, [e.target.name]: e.target.value});
@@ -14,6 +16,14 @@ export default function SignUp() {
   const handleGithub = e => {
     loginWithGithub().then(setUser);
   }
+  const handleLogout = e => {
+    logout().then(setUser);
+  }
+  const handleUpload = e => {
+    setFile(e.target.files && e.target.files[0]);
+    uploadImage(file)
+      .then(url => setUserInfo({...userInfo, ['photo']: url}));
+  }
 
   return (
     <div style={{margin: '20px'}}>
@@ -22,7 +32,11 @@ export default function SignUp() {
           onChange={handleChange} /><br />
         <input type="password" name='password' value={userInfo.password} placeholder="패스워드"
           onChange={handleChange} /><br />
+        <input type="text" name='name' value={userInfo.name} placeholder="이름"
+          onChange={handleChange} /><br />
+        <input type="file" accept="image/*" name='file' onChange={handleUpload} /><br />
         <button onClick={handleSubmit}>사용자 등록</button>
+        <button onClick={handleLogout}>로그아웃</button>
       </form><br /><br />
       <button onClick={handleGithub}>깃허브 로그인</button>
       <br /><br />
@@ -30,7 +44,9 @@ export default function SignUp() {
       {user && <p>email={user.email}</p>}
       {user && <p>uid={user.uid}</p>}
       {user && user.displayName && <p>displayName={user.displayName}</p>}
-      {user && user.photoURL && <p>photoURL={user.photoURL}</p>}
+      {user && user.photoURL && (
+        <img src={user.photoURL} alt={user.displayName} width={200} />
+      )}
     </div>
   )
 }

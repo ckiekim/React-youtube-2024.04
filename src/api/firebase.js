@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, GithubAuthProvider,
-  signInWithPopup } from "firebase/auth";
+  signInWithPopup, signOut } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -22,5 +22,11 @@ export async function loginWithGithub() {
   const provider = new GithubAuthProvider();
   return signInWithPopup(auth, provider)
     .then(result => result.user)
+    .catch(console.error);
+}
+
+export async function logout() {
+  return signOut(auth)
+    .then(() => null)
     .catch(console.error);
 }
