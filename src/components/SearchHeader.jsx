@@ -62,7 +62,7 @@ export default function SearchHeader() {
               )}
               {user && <p>{user.displayName}</p>}
               {user && <button onClick={logout}>로그아웃</button>}
-              {!user && <Link to='/signUp'>로그인</Link>}
+              {!user && <Link to='/signIn'>로그인</Link>}
             </Stack>
           </Grid>
         </Grid>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { register, loginWithGithub, logout, login } from '../api/firebase';
+import { register, loginWithGithub } from '../api/firebase';
 import { uploadImage } from "../api/cloudinary";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function SignUp() {
   const [userInfo, setUserInfo] = useState({email:'', password:'', name:'', photo:''});
@@ -19,17 +19,10 @@ export default function SignUp() {
     loginWithGithub();
     navigate(-1);
   }
-  const handleLogout = () => {
-    logout();
-  }
   const handleUpload = e => {
     setFile(e.target.files && e.target.files[0]);
     uploadImage(file)
       .then(url => setUserInfo({...userInfo, ['photo']: url}));
-  }
-  const handleLogin = () => {
-    login(userInfo);
-    navigate(-1);
   }
 
   return (
@@ -43,9 +36,9 @@ export default function SignUp() {
           onChange={handleChange} /><br />
         <input type="file" accept="image/*" name='file' onChange={handleUpload} /><br />
         <button onClick={handleSubmit}>사용자 등록</button>
-        <button onClick={handleLogin}>로그인</button>
-        <button onClick={handleLogout}>로그아웃</button>
       </form><br />
+      <span>계정이 있으신가요?</span>
+      <Link to='/signIn'>로그인</Link><br /><br />
       <button onClick={handleGithub}>깃허브 로그인</button>
 
     </div>
