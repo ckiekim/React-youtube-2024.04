@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { register, loginWithGithub, logout } from '../api/firebase';
+import { register, loginWithGithub, logout, login } from '../api/firebase';
 import { uploadImage } from "../api/cloudinary";
 
 export default function SignUp() {
@@ -11,18 +11,21 @@ export default function SignUp() {
   }
   const handleSubmit = e => {
     e.preventDefault();
-    register(userInfo).then(setUser);
+    register(userInfo);
   }
   const handleGithub = e => {
     loginWithGithub().then(setUser);
   }
-  const handleLogout = e => {
+  const handleLogout = () => {
     logout().then(setUser);
   }
   const handleUpload = e => {
     setFile(e.target.files && e.target.files[0]);
     uploadImage(file)
       .then(url => setUserInfo({...userInfo, ['photo']: url}));
+  }
+  const handleLogin = () => {
+    login(userInfo).then(setUser);
   }
 
   return (
@@ -36,6 +39,7 @@ export default function SignUp() {
           onChange={handleChange} /><br />
         <input type="file" accept="image/*" name='file' onChange={handleUpload} /><br />
         <button onClick={handleSubmit}>사용자 등록</button>
+        <button onClick={handleLogin}>로그인</button>
         <button onClick={handleLogout}>로그아웃</button>
       </form><br /><br />
       <button onClick={handleGithub}>깃허브 로그인</button>

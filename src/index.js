@@ -19,6 +19,8 @@ const router = createBrowserRouter([
       { path: 'videos/:keyword', element: <Videos /> },
       { path: 'videos/watch/:videoId', element: <VideoDetail /> },
       { path: 'signUp', element: <SignUp /> },
+      { path: 'videos/record',
+        element: }
     ]
   }
 ]);
