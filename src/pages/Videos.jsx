@@ -19,7 +19,7 @@ export default function Videos() {
         <Grid container spacing={1}>
           {videos.map(video => (
             <Grid item xs={12} sm={6} md={4} lg={3}>
-              <VideoCard video={video} />
+              <VideoCard video={video} key={video.id} />
             </Grid>
           ))}
         </Grid>

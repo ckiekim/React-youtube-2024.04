@@ -20,8 +20,8 @@ export default function SignUp() {
     navigate(-1);
   }
   const handleUpload = e => {
-    setFile(e.target.files && e.target.files[0]);
-    uploadImage(file)
+    setFile(e.target.files[0]);
+    uploadImage(e.target.files[0])
       .then(url => setUserInfo({...userInfo, ['photo']: url}));
   }
 
@@ -32,15 +32,16 @@ export default function SignUp() {
           onChange={handleChange} /><br />
         <input type="password" name='password' value={userInfo.password} placeholder="패스워드"
           onChange={handleChange} /><br />
-        <input type="text" name='name' value={userInfo.name} placeholder="이름"
+        <input type="text" name='name' value={userInfo.name} placeholder="이름" required
           onChange={handleChange} /><br />
-        <input type="file" accept="image/*" name='file' onChange={handleUpload} /><br />
+        <input type="file" accept="image/*" name='file' onChange={handleUpload} required /><br />
         <button onClick={handleSubmit}>사용자 등록</button>
       </form><br />
       <span>계정이 있으신가요?</span>
       <Link to='/signIn'>로그인</Link><br /><br />
       <button onClick={handleGithub}>깃허브 로그인</button>
-
+      <br /><br />
+      {file && (<img src={URL.createObjectURL(file)} alt='profile' />)}
     </div>
   )
 }
