@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, GithubAuthProvider,
+  signInWithPopup } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -11,11 +12,15 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
 export async function register({ email, password }) {
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((result) => {
-      const user = result.user;
-      console.log(user);
-      return user;
-    })
+  console.log('firebase:register():', email, password);
+  return createUserWithEmailAndPassword(auth, email, password)
+    .then(result => result.user)
+    .catch(console.error);
+}
+
+export async function loginWithGithub() {
+  const provider = new GithubAuthProvider();
+  return signInWithPopup(auth, provider)
+    .then(result => result.user)
     .catch(console.error);
 }
