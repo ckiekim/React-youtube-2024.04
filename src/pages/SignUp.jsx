@@ -1,23 +1,26 @@
 import React, { useState } from "react";
 import { register, loginWithGithub, logout, login } from '../api/firebase';
 import { uploadImage } from "../api/cloudinary";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
   const [userInfo, setUserInfo] = useState({email:'', password:'', name:'', photo:''});
   const [file, setFile] = useState();
-  const [user, setUser] = useState();
+  const navigate = useNavigate();
   const handleChange = e => {
     setUserInfo({...userInfo, [e.target.name]: e.target.value});
   }
   const handleSubmit = e => {
     e.preventDefault();
     register(userInfo);
+    navigate('/signIn');
   }
   const handleGithub = e => {
-    loginWithGithub().then(setUser);
+    loginWithGithub();
+    navigate(-1);
   }
   const handleLogout = () => {
-    logout().then(setUser);
+    logout();
   }
   const handleUpload = e => {
     setFile(e.target.files && e.target.files[0]);
@@ -25,7 +28,8 @@ export default function SignUp() {
       .then(url => setUserInfo({...userInfo, ['photo']: url}));
   }
   const handleLogin = () => {
-    login(userInfo).then(setUser);
+    login(userInfo);
+    navigate(-1);
   }
 
   return (
@@ -41,16 +45,9 @@ export default function SignUp() {
         <button onClick={handleSubmit}>사용자 등록</button>
         <button onClick={handleLogin}>로그인</button>
         <button onClick={handleLogout}>로그아웃</button>
-      </form><br /><br />
+      </form><br />
       <button onClick={handleGithub}>깃허브 로그인</button>
-      <br /><br />
-      {user && <p>accessToken={user.accessToken}</p>}
-      {user && <p>email={user.email}</p>}
-      {user && <p>uid={user.uid}</p>}
-      {user && user.displayName && <p>displayName={user.displayName}</p>}
-      {user && user.photoURL && (
-        <img src={user.photoURL} alt={user.displayName} width={200} />
-      )}
+
     </div>
   )
 }

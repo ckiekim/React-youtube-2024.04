@@ -9,6 +9,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import { useAuthContext } from "../context/AuthContext";
 
 export default function SearchHeader() {
   const { keyword } = useParams();
@@ -22,6 +23,7 @@ export default function SearchHeader() {
   useEffect(() => {
     setText(keyword || '');
   }, [keyword]);
+  const { user, logout } = useAuthContext();
 
   return (
     <header>
@@ -35,7 +37,7 @@ export default function SearchHeader() {
               </Stack>
             </Link>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={5}>
             <Paper
               component="form" onSubmit={handleSubmit}
               sx={{ p:'2px 4px', display:'flex', alignItems:'center', width:'100%' }}
@@ -52,7 +54,17 @@ export default function SearchHeader() {
               </IconButton>
             </Paper>
           </Grid>
-          <Grid item xs={3}></Grid>
+          <Grid item xs={4}>
+            <Stack direction='row' spacing={1} justifyContent='right' alignItems='center'>
+              {user && <Link to='/videos/record'>시청기록</Link>}
+              {user && user.photoURL && (
+                <img src={user.photoURL} alt={user.displayName} height='32' style={{borderRadius:100}} />
+              )}
+              {user && <p>{user.displayName}</p>}
+              {user && <button onClick={logout}>로그아웃</button>}
+              {!user && <Link to='/signUp'>로그인</Link>}
+            </Stack>
+          </Grid>
         </Grid>
       </Stack>
       <Divider sx={{my: 1}} />
