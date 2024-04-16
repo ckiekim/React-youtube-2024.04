@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
@@ -10,6 +11,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import { useAuthContext } from "../context/AuthContext";
+import LoginModal from "./LoginModal";
 
 export default function SearchHeader() {
   const { keyword } = useParams();
@@ -55,14 +57,18 @@ export default function SearchHeader() {
             </Paper>
           </Grid>
           <Grid item xs={4}>
-            <Stack direction='row' spacing={1} justifyContent='right' alignItems='center'>
+            <Stack direction='row' spacing={2} justifyContent='right' alignItems='center'>
               {user && <Link to='/videos/record'>시청기록</Link>}
               {user && user.photoURL && (
                 <img src={user.photoURL} alt={user.displayName} height='32' style={{borderRadius:100}} />
               )}
               {user && <p>{user.displayName}</p>}
-              {user && <button onClick={logout}>로그아웃</button>}
-              {!user && <Link to='/signIn'>로그인</Link>}
+              {user && (
+                <Button variant="outlined" onClick={logout} size="small">
+                  로그아웃
+                </Button>
+              )}
+              {!user && <LoginModal />}
             </Stack>
           </Grid>
         </Grid>

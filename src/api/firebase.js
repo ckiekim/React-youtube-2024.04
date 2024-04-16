@@ -24,7 +24,8 @@ export function register({ email, password, name, photo }) {
     .catch(console.error);
 }
 
-export function login({ email, password}) {
+export function login({ email, password }) {
+  console.log('firebase.js:login(): ', email, password);
   signInWithEmailAndPassword(auth, email, password)
     .catch(console.error);
 }
