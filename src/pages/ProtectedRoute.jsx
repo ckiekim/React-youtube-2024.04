@@ -4,9 +4,14 @@ import { useAuthContext } from "../context/AuthContext";
 
 export default function ProtectedRoute({ children }) {
   const { user } = useAuthContext();
+  console.log(user);
 
-  if (!user)
-    return <Navigate to='/' replace={true} />
+  if (!user) {
+    alert('먼저 로그인을 해 주세요.');
+    return (
+        <Navigate to='/' replace={true} />
+    );
+  }
 
   return children;
 }

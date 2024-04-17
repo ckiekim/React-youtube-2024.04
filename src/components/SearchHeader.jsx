@@ -26,6 +26,7 @@ export default function SearchHeader() {
     setText(keyword || '');
   }, [keyword]);
   const { user, logout } = useAuthContext();
+  console.log(user);
 
   return (
     <header>
@@ -39,7 +40,7 @@ export default function SearchHeader() {
               </Stack>
             </Link>
           </Grid>
-          <Grid item xs={5}>
+          <Grid item xs={4}>
             <Paper
               component="form" onSubmit={handleSubmit}
               sx={{ p:'2px 4px', display:'flex', alignItems:'center', width:'100%' }}
@@ -56,9 +57,10 @@ export default function SearchHeader() {
               </IconButton>
             </Paper>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={5}>
             <Stack direction='row' spacing={2} justifyContent='right' alignItems='center'>
               {user && <Link to='/videos/record'>시청기록</Link>}
+              {user && user.isAdmin && <p>사용자목록</p>}
               {user && user.photoURL && (
                 <img src={user.photoURL} alt={user.displayName} height='32' style={{borderRadius:100}} />
               )}
