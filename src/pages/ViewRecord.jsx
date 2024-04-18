@@ -14,7 +14,7 @@ export default function ViewRecord() {
 
   return (
     <>
-      <Typography variant="h5" gutterBottom>나의 시청기록</Typography>
+      <Typography variant="h5" gutterBottom sx={{fontWeight:'bold'}}>나의 시청기록</Typography>
       {records && (
         <Grid container spacing={1}>
           {records.map(record => (

@@ -4,16 +4,21 @@ import Typography from '@mui/material/Typography';
 
 import { formatAgo } from "../util/date";
 
-export default function WatchRecord({ record }) {
+export default function WatchRecord({ record, showUser }) {
   const { thumbnailUrl, userName, title, channel, watchAt } = record;
   return (
     <Stack direction={'row'} spacing={2}>
       <img src={thumbnailUrl} alt={title} height={90} />
       <Stack>
-        {/* <Typography>{userName}</Typography> */}
+        {showUser && <Typography>{userName}</Typography>}
         <Typography sx={{fontWeight: 'bold'}}>{title}</Typography>
-        <Typography>{channel}</Typography>
-        <Typography>{formatAgo(record.watchAt, 'ko')}</Typography>
+        {showUser && <Typography>{channel},&nbsp;&nbsp;{formatAgo(watchAt, 'ko')}</Typography>}
+        {!showUser && (
+          <>
+            <Typography>{channel}</Typography>
+            <Typography>{formatAgo(watchAt, 'ko')}</Typography>
+          </>
+        )}
       </Stack>
     </Stack>
   )

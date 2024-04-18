@@ -87,10 +87,24 @@ export async function getWatchVideoRecord(userId) {
       if (snapshot.exists()) {
         const objects = snapshot.val();
         const records = Object.values(objects);   // object를 array로 변환
-        return records.filter(record => record.userId === userId);
+        if (userId)
+          return records.filter(record => record.userId === userId);
+        else
+          return records;
       }
       return null;
     });
 }
 
-
+export async function getWatchVideoRecordByUser() {
+  return get(ref(database, 'videoRecords'))
+    .then(snapshot => {
+      if (snapshot.exists()) {
+        const objects = snapshot.val();
+        const records = Object.values(objects);   // object를 array로 변환
+        const result = Object.groupBy(records, ({ userName }) => userName);
+        return result;
+      }
+      return null;
+    });
+}
