@@ -59,8 +59,8 @@ export default function SearchHeader() {
           </Grid>
           <Grid item xs={5}>
             <Stack direction='row' spacing={2} justifyContent='right' alignItems='center'>
+              {user && user.isAdmin && <Link to='/videos/admin'>관리자 메뉴</Link>}
               {user && <Link to='/videos/record'>시청기록</Link>}
-              {user && user.isAdmin && <p>사용자목록</p>}
               {user && user.photoURL && (
                 <img src={user.photoURL} alt={user.displayName} height='32' style={{borderRadius:100}} />
               )}

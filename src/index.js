@@ -6,11 +6,9 @@ import Videos from './pages/Videos';
 import VideoDetail from './pages/VideoDetail';
 import NotFound from './pages/NotFound';
 import reportWebVitals from './reportWebVitals';
-import SignUp from './pages/user/SignUp';
-import SignIn from './pages/user/SignIn';
 import ProtectedRoute from './pages/ProtectedRoute';
 import ViewRecord from './pages/ViewRecord';
-import UserList from './pages/user/UserList';
+import TotalViewRecord from './pages/TotalViewRecord';
 
 const router = createBrowserRouter([
   {
@@ -19,13 +17,13 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       { index: true, element: <Videos /> },
-      { path: 'videos', element: <Videos /> },
-      { path: 'videos/:keyword', element: <Videos /> },
-      { path: 'videos/watch/:videoId', element: <VideoDetail /> },
-      // { path: 'signUp', element: <SignUp /> },
-      // { path: 'signIn', element: <SignIn /> },
-      { path: 'videos/record', element: <ProtectedRoute><ViewRecord /></ProtectedRoute> },
-      { path: '/users/list', element: <UserList /> },
+      { path: '/videos', element: <Videos /> },
+      { path: '/videos/:keyword', element: <Videos /> },
+      { path: '/videos/watch/:videoId', element: <VideoDetail /> },
+      { path: '/videos/record', 
+        element: <ProtectedRoute><ViewRecord /></ProtectedRoute> },
+      { path: '/videos/admin', 
+        element: <ProtectedRoute requireAdmin><TotalViewRecord /></ProtectedRoute> },
     ]
   }
 ]);

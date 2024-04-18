@@ -1,8 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, GithubAuthProvider, GoogleAuthProvider,
   signInWithPopup, signOut, updateProfile, signInWithEmailAndPassword,
-  onAuthStateChanged, signInWithRedirect} from "firebase/auth";
-import { getDatabase, ref, get } from "firebase/database";
+  onAuthStateChanged, signInWithRedirect } from "firebase/auth";
+import { getDatabase, ref, get, set } from "firebase/database";
+import { v4 as uuid } from 'uuid';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -70,15 +71,26 @@ async function adminUser(user) {
     });
 }
 
-
-export async function getUserList() {
-  console.log('getUserList()');
-  return getAuth().listUsers(100)
-    .then(result => {
-      result.users.map(user => {
-        console.log(user.toJSON());
-      })
-      return result.users
-    })
-    .catch(console.error);
+export async function addWatchVideoRecord({ user, video }) {
+  const id = uuid();
+  return set(ref(database, `videoRecords/${id}`), {
+    id, userId:user.uid, userName:user.displayName,
+    videoId:video.id, title:video.snippet.title, channel:video.snippet.channelTitle,
+    thumbnailUrl: video.snippet.thumbnails.medium.url, 
+    watchAt: new Date().toISOString()
+  });
 }
+
+export async function getWatchVideoRecord(userId) {
+  return get(ref(database, 'videoRecords'))
+    .then(snapshot => {
+      if (snapshot.exists()) {
+        const objects = snapshot.val();
+        const records = Object.values(objects);   // object를 array로 변환
+        return records.filter(record => record.userId === userId);
+      }
+      return null;
+    });
+}
+
+

@@ -5,9 +5,16 @@ import Grid from '@mui/material/Grid';
 import ChannelInfo from "../components/ChannelInfo";
 import RelatedVideos from "../components/RelatedVideos";
 
+import { useAuthContext } from "../context/AuthContext";
+import { addWatchVideoRecord } from "../api/firebase";
+
 export default function VideoDetail() {
   const { state: {video} } = useLocation();
   const { title, channelId, channelTitle, description } = video.snippet;
+  const { user } = useAuthContext();
+  if (user) {
+    addWatchVideoRecord({ user, video });
+  }
 
   return (
     <Grid container spacing={2}>
