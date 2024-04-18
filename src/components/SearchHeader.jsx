@@ -26,15 +26,14 @@ export default function SearchHeader() {
     setText(keyword || '');
   }, [keyword]);
   const { user, logout } = useAuthContext();
-  console.log(user);
 
   return (
     <header>
-      <Stack direction={'row'} sx={{alignItems: 'center'}}>
+      <Stack direction={'row'} alignItems='center'>
         <Grid container>
           <Grid item xs={3}>
             <Link to='/' style={{textDecoration: 'none'}}>
-              <Stack direction={'row'} spacing={1}>
+              <Stack direction={'row'} spacing={1} alignItems='center'>
                 <YouTubeIcon color='error' fontSize="large" />
                 <Typography variant="h4" sx={{fontWeight: 'bold'}}>Youtube</Typography>
               </Stack>
@@ -59,14 +58,16 @@ export default function SearchHeader() {
           </Grid>
           <Grid item xs={5}>
             <Stack direction='row' spacing={2} justifyContent='right' alignItems='center'>
-              {user && user.isAdmin && <Link to='/videos/admin'>관리자 메뉴</Link>}
-              {user && <Link to='/videos/record'>시청기록</Link>}
+              {user && user.isAdmin && 
+                <Link to='/videos/admin'><Typography variant="h6">관리자 메뉴</Typography></Link>}
+              {user && 
+                <Link to='/videos/record'><Typography variant="h6">시청기록</Typography></Link>}
               {user && user.photoURL && (
                 <img src={user.photoURL} alt={user.displayName} height='32' style={{borderRadius:100}} />
               )}
-              {user && <p>{user.displayName}</p>}
+              {user && <Typography variant="h6">{user.displayName}</Typography>}
               {user && (
-                <Button variant="outlined" onClick={logout} size="small">
+                <Button variant="outlined" onClick={logout}>
                   로그아웃
                 </Button>
               )}

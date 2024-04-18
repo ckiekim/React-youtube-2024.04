@@ -7,14 +7,14 @@ export default function ProtectedRoute({ children, requireAdmin }) {
   console.log(user);
 
   if (!user) {
-    alert('먼저 로그인을 해 주세요.');
+    // alert('먼저 로그인을 해 주세요.');
     return (
         <Navigate to='/' replace={true} />
     );
   }
 
   if (requireAdmin && !user.isAdmin) {
-    alert('관리자만 사용 가능한 메뉴입니다.');
+    // alert('관리자만 사용 가능한 메뉴입니다.');
     return (
         <Navigate to='/' replace={true} />
     );

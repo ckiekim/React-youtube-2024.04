@@ -45,7 +45,7 @@ export default function LoginModal() {
 
   return (
     <Fragment>
-      <Button variant="outlined" onClick={handleClickOpen} size="small">
+      <Button variant="outlined" onClick={handleClickOpen}>
         로그인
       </Button>
       <BootstrapDialog

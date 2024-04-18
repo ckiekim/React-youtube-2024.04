@@ -86,23 +86,37 @@ export async function getWatchVideoRecord(userId) {
     .then(snapshot => {
       if (snapshot.exists()) {
         const objects = snapshot.val();
-        const records = Object.values(objects);   // object를 array로 변환
-        if (userId)
-          return records.filter(record => record.userId === userId);
-        else
-          return records;
+        let records = Object.values(objects);   // object를 array로 변환
+        records = records.filter(record => record.userId === userId);   // userId 필터링
+        records = records.sort((a, b) => b.watchAt.localeCompare(a.watchAt));   // 내림차순 정렬
+        const newRecords = records.filter((record, idx) => {    // 중복 제거
+          return (
+            records.findIndex(eachRecord => {
+              return record.videoId === eachRecord.videoId
+            }) === idx
+          ) 
+        });
+        return newRecords;
       }
       return null;
     });
 }
 
-export async function getWatchVideoRecordByUser() {
+export async function getTotalWatchVideoRecordByUser() {
   return get(ref(database, 'videoRecords'))
     .then(snapshot => {
       if (snapshot.exists()) {
         const objects = snapshot.val();
-        const records = Object.values(objects);   // object를 array로 변환
-        const result = Object.groupBy(records, ({ userName }) => userName);
+        let records = Object.values(objects);   // object를 array로 변환
+        records = records.sort((a, b) => b.watchAt.localeCompare(a.watchAt));   // 내림차순 정렬
+        const newRecords = records.filter((record, idx) => {    // 중복 제거
+          return (
+            records.findIndex(eachRecord => {
+              return (record.videoId === eachRecord.videoId && record.userId === eachRecord.userId)
+            }) === idx
+          ) 
+        });
+        const result = Object.groupBy(newRecords, ({ userName }) => userName);    // Grouping
         return result;
       }
       return null;
