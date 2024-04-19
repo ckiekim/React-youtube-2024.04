@@ -20,7 +20,7 @@ const router = createBrowserRouter([
       { path: '/videos', element: <Videos /> },
       { path: '/videos/:keyword', element: <Videos /> },
       { path: '/videos/watch/:videoId', element: <VideoDetail /> },
-      { path: '/videos/record', 
+      { path: '/videos/record',
         element: <ProtectedRoute><ViewRecord /></ProtectedRoute> },
       { path: '/videos/admin', 
         element: <ProtectedRoute requireAdmin><TotalViewRecord /></ProtectedRoute> },

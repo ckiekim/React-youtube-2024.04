@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -6,15 +6,22 @@ import ChannelInfo from "../components/ChannelInfo";
 import RelatedVideos from "../components/RelatedVideos";
 
 import { useAuthContext } from "../context/AuthContext";
-import { addWatchVideoRecord } from "../api/firebase";
+// import { addWatchVideoRecord } from "../api/firebase";
+import useWatchVideo from '../hooks/useWatchVideo';
 
 export default function VideoDetail() {
   const { state: {video} } = useLocation();
   const { title, channelId, channelTitle, description } = video.snippet;
   const { user } = useAuthContext();
-  if (user) {
-    addWatchVideoRecord({ user, video });
-  }
+  const { addRecord } = useWatchVideo(user);
+  useEffect(() => {
+    if (user)
+      addRecord.mutate({ user, video });
+  }, []);
+  // if (user) {
+  //   // addWatchVideoRecord({ user, video });
+  //   addRecord.mutate({ user, video });
+  // }
 
   return (
     <Grid container spacing={2}>
