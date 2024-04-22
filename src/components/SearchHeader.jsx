@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Badge from '@mui/material/Badge';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
 import Link from '@mui/material/Link';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import MenuIcon from '@mui/icons-material/Menu';
 import Paper from '@mui/material/Paper';
 import SearchIcon from '@mui/icons-material/Search';
 import Stack from '@mui/material/Stack';
@@ -22,9 +27,9 @@ export default function SearchHeader() {
   const { keyword } = useParams();
   const navigate = useNavigate();
   const [text, setText] = useState('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const handleSubmit = e => {
     e.preventDefault();
-    // console.log(text);
     navigate(`/videos/${text}`);
   }
   useEffect(() => {
@@ -32,21 +37,23 @@ export default function SearchHeader() {
   }, [keyword]);
   const { user, logout } = useAuthContext();
   const { getCount: { data: count }} = useWatchVideo(user);
-  // const [count, setCount] = useState(0);
 
   return (
     <header>
       <Stack direction={'row'} alignItems='center'>
         <Grid container>
-          <Grid item xs={3}>
+          <Grid item xs={2} md={2} lg={3}>
             <Link href='/' style={{textDecoration: 'none', color: 'black'}}>
               <Stack direction={'row'} spacing={1} alignItems='center'>
                 <YouTubeIcon color='error' fontSize="large" />
-                <Typography variant="h4" sx={{fontWeight: 'bold'}}>Youtube</Typography>
+                <Typography variant="h4" 
+                  sx={{fontWeight: 'bold', display: {xs: 'none', md: 'none', lg: 'flex'}}}>
+                  Youtube
+                </Typography>
               </Stack>
             </Link>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={7} md={6} lg={4}>
             <Paper
               component="form" onSubmit={handleSubmit}
               sx={{ p:'2px 4px', display:'flex', alignItems:'center', width:'100%' }}
@@ -63,8 +70,9 @@ export default function SearchHeader() {
               </IconButton>
             </Paper>
           </Grid>
-          <Grid item xs={5}>
-            <Stack direction='row' spacing={2} justifyContent='right' alignItems='center'>
+          <Grid item xs={3} md={4} lg={5}>
+            <Stack direction='row' spacing={2} justifyContent='right' alignItems='center'
+              sx={{display: {xs: 'none', md: 'none', lg: 'flex'}}}>
               {user && user.isAdmin && 
                 <Link href='/videos/admin' underline="hover" color='primary'>
                   <Typography variant="h6">관리자 메뉴</Typography>
@@ -88,6 +96,46 @@ export default function SearchHeader() {
                 </Button>
               )}
               {!user && <LoginModal />}
+            </Stack>
+            <Stack direction='row' spacing={2} justifyContent='right' alignItems='center'
+              sx={{display: {xs: 'flex', md: 'flex', lg: 'none'}}}>
+              {(count > 0) &&
+                <Link href='/videos/record' color='primary'>
+                  <Badge badgeContent={count} color="primary">
+                    <VideocamIcon color="action" />
+                  </Badge>
+                </Link>}
+              <IconButton sx={{ p: 1 }} aria-label="menu" color="inherit"
+                onClick={() => setIsMenuOpen(true)}>
+                <MenuIcon />
+              </IconButton>
+              <Drawer open={isMenuOpen} onClose={() => setIsMenuOpen(false)} anchor="right"
+                sx={{ "& .MuiDrawer-paper": { height: "20%" } }}>
+                <Box sx={{ width: 250 }} role="presentation" onClick={() => setIsMenuOpen(false)}>
+                  <List>
+                    {user && 
+                      <ListItem key={'key01'} disablePadding sx={{ px: 2, py: 0.5 }}>
+                        <Link href='/videos/record' color='primary'>
+                          <Typography variant="h6">시청기록</Typography>
+                        </Link>
+                      </ListItem>}
+                    {user && user.isAdmin &&
+                      <ListItem key={'key02'} disablePadding sx={{ px: 2, py: 0.5 }}>
+                        <Link href='/videos/admin' color='primary'>
+                          <Typography variant="h6">관리자 메뉴</Typography>
+                        </Link>
+                      </ListItem>}
+                    <ListItem key={'key03'} disablePadding sx={{ px: 2, py: 0.5 }}>
+                      {user && (
+                        <Button variant="outlined" onClick={logout}>
+                          로그아웃
+                        </Button>
+                      )}
+                      {!user && <LoginModal />}
+                    </ListItem>
+                  </List>
+                </Box>
+              </Drawer>
             </Stack>
           </Grid>
         </Grid>
