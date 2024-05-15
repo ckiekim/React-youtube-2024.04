@@ -8,6 +8,8 @@ export default function ProtectedRoute({ children, requireAdmin }) {
   useEffect(() => {
     if (user)
       setIsLoading(false);
+    else
+      setIsLoading(false);  // 이것을 세팅해야 로그인이 올바르게 처리됨
   }, [user]);
 
   if (isLoading)
